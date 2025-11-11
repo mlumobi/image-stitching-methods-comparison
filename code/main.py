@@ -55,7 +55,7 @@ if __name__ == '__main__':
         "Image Stitching GUI",
         url=f'file://{html_path}',
         width=1000,
-        height=750,
+        height=900,
         js_api=api
     )
     webview.start()

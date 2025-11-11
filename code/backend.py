@@ -7,9 +7,7 @@ from blending import blend_images
 
 class ImageAlignBackend:
     def __init__(self):
-        self.output_dir = "outputs/gui"
-        self.project_output_dir = "../outputs"
-        os.makedirs(self.output_dir, exist_ok=True)
+        self.project_output_dir = "outputs"
         os.makedirs(self.project_output_dir, exist_ok=True)
 
     def run_pipeline(self, path1, path2, method):

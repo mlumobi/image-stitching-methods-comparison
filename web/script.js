@@ -58,12 +58,10 @@ async function run(event) {
   }
 
   const runBtn = document.getElementById('runBtn');
-  const saveBtn = document.getElementById('saveBtn');
   
   try {
     appendStatus('Uploading images...', true);
     runBtn.disabled = true;
-    saveBtn.style.display = 'none';
     startTimer();
 
     const buffer1 = await img1.arrayBuffer();
@@ -93,8 +91,6 @@ async function run(event) {
     if (outputs.features1) document.getElementById('output_feat1').src = outputs.features1;
     if (outputs.features2) document.getElementById('output_feat2').src = outputs.features2;
     
-    // Show save button
-    saveBtn.style.display = 'block';
 
   } catch (error) {
     stopTimer();
@@ -103,42 +99,6 @@ async function run(event) {
   } finally {
     runBtn.disabled = false;
   }
-}
-
-// Save results
-async function saveResults() {
-  if (!currentOutputs) {
-    alert("No results to save!");
-    return;
-  }
-
-  const { method, outputs } = currentOutputs;
-  
-  // Download each image
-  if (outputs.stitched) {
-    downloadImage(outputs.stitched, `stitched_${method.toLowerCase()}.jpg`);
-  }
-  if (outputs.matches) {
-    downloadImage(outputs.matches, `matches_${method.toLowerCase()}.jpg`);
-  }
-  if (outputs.features1) {
-    downloadImage(outputs.features1, `features1_${method.toLowerCase()}.jpg`);
-  }
-  if (outputs.features2) {
-    downloadImage(outputs.features2, `features2_${method.toLowerCase()}.jpg`);
-  }
-
-  alert("Results saved! Check your Downloads folder.");
-}
-
-// Helper to download image from data URI
-function downloadImage(dataUri, filename) {
-  const link = document.createElement('a');
-  link.href = dataUri;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 }
 
 // Function to initialize Panzoom for any image element
@@ -158,7 +118,7 @@ function initPanzoom(imgId) {
       minScale: 0.2,
       maxScale: 10,
       cursor: 'grab',
-      contain: false
+      contain: 'outside'
     });
 
     // Use the image itself for wheel events
