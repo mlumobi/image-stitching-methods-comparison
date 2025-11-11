@@ -69,14 +69,14 @@ async function run(event) {
     const buffer1 = await img1.arrayBuffer();
     const buffer2 = await img2.arrayBuffer();
     
-  appendStatus('Processing: Converting images...');
+    appendStatus('Processing: Converting images...');
     const path1 = await window.pywebview.api.save_temp_file(Array.from(new Uint8Array(buffer1)), img1.name);
     const path2 = await window.pywebview.api.save_temp_file(Array.from(new Uint8Array(buffer2)), img2.name);
     
-  appendStatus(`Running ${method} stitching... This may take a few seconds.`);
+    appendStatus(`Running ${method} stitching... This may take a few seconds.`);
     const outputs = await window.pywebview.api.run_pipeline(path1, path2, method);
 
-  stopTimer();
+    stopTimer();
     
     // Store results for save function
     currentOutputs = {
@@ -85,9 +85,9 @@ async function run(event) {
       outputs: outputs
     };
 
-  appendStatus('Stitching complete!');
+    appendStatus('Stitching complete!');
     
-    // Load images into tabs
+    // Load images into panes
     if (outputs.stitched) document.getElementById('output_stitched').src = outputs.stitched;
     if (outputs.matches) document.getElementById('output_matches').src = outputs.matches;
     if (outputs.features1) document.getElementById('output_feat1').src = outputs.features1;
@@ -95,8 +95,7 @@ async function run(event) {
     
     // Show save button
     saveBtn.style.display = 'block';
-    
-  // All panes are visible on the same page; no tab switching required.
+
   } catch (error) {
     stopTimer();
     appendStatus(`✗ Error: ${error.message}`);
@@ -142,122 +141,39 @@ function downloadImage(dataUri, filename) {
   document.body.removeChild(link);
 }
 
-// Initialize Panzoom for stitched image with proper zoom in/out
-(function () {
-  const img = document.getElementById('output_stitched');
+// Function to initialize Panzoom for any image element
+function initPanzoom(imgId) {
+  const img = document.getElementById(imgId);
   if (!img) return;
 
-  function initializePanzoom() {
+  function initialize() {
     const container = img.parentElement;
-
     container.style.display = 'flex';
     container.style.justifyContent = 'center';
     container.style.alignItems = 'center';
     container.style.overflow = 'hidden';
 
+    // Attach Panzoom to the image element, not the container
     const panzoom = Panzoom(img, {
-      minScale: 0.2,   // allow zoom out
-      maxScale: 10,    // allow zoom in
+      minScale: 0.2,
+      maxScale: 10,
       cursor: 'grab',
       contain: false
-     });
+    });
 
-    container.addEventListener('wheel', panzoom.zoomWithWheel);
+    // Use the image itself for wheel events
+    img.addEventListener('wheel', (e) => panzoom.zoomWithWheel(e, { focal: true }));
   }
 
   if (img.complete && img.naturalWidth !== 0) {
-    initializePanzoom();
+    initialize();
   } else {
-    img.addEventListener('load', initializePanzoom);
+    img.addEventListener('load', initialize);
   }
-})();
+}
 
-// Initialize Panzoom for matches image with proper zoom in/out
-(function () {
-  const img = document.getElementById('output_matches');
-  if (!img) return;
-
-  function initializePanzoom() {
-    const container = img.parentElement;
-
-    container.style.display = 'flex';
-    container.style.justifyContent = 'center';
-    container.style.alignItems = 'center';
-    container.style.overflow = 'hidden';
-
-    const panzoom = Panzoom(img, {
-      minScale: 0.2,   // allow zoom out
-      maxScale: 10,    // allow zoom in
-      cursor: 'grab',
-      contain: false
-     });
-
-    container.addEventListener('wheel', panzoom.zoomWithWheel);
-  }
-
-  if (img.complete && img.naturalWidth !== 0) {
-    initializePanzoom();
-  } else {
-    img.addEventListener('load', initializePanzoom);
-  }
-})();
-
-// Initialize Panzoom for features1 image with proper zoom in/out
-(function () {
-  const img = document.getElementById('output_feat1');
-  if (!img) return;
-
-  function initializePanzoom() {
-    const container = img.parentElement;
-
-    container.style.display = 'flex';
-    container.style.justifyContent = 'center';
-    container.style.alignItems = 'center';
-    container.style.overflow = 'hidden';
-
-    const panzoom = Panzoom(img, {
-      minScale: 0.2,   // allow zoom out
-      maxScale: 10,    // allow zoom in
-      cursor: 'grab',
-      contain: false
-     });
-
-    container.addEventListener('wheel', panzoom.zoomWithWheel);
-  }
-
-  if (img.complete && img.naturalWidth !== 0) {
-    initializePanzoom();
-  } else {
-    img.addEventListener('load', initializePanzoom);
-  }
-})();
-
-// Initialize Panzoom for features2 image with proper zoom in/out
-(function () {
-  const img = document.getElementById('output_feat2');
-  if (!img) return;
-
-  function initializePanzoom() {
-    const container = img.parentElement;
-
-    container.style.display = 'flex';
-    container.style.justifyContent = 'center';
-    container.style.alignItems = 'center';
-    container.style.overflow = 'hidden';
-
-    const panzoom = Panzoom(img, {
-      minScale: 0.2,   // allow zoom out
-      maxScale: 10,    // allow zoom in
-      cursor: 'grab',
-      contain: false
-     });
-
-    container.addEventListener('wheel', panzoom.zoomWithWheel);
-  }
-
-  if (img.complete && img.naturalWidth !== 0) {
-    initializePanzoom();
-  } else {
-    img.addEventListener('load', initializePanzoom);
-  }
-})();
+// Initialize Panzoom for all result images
+initPanzoom('output_stitched');
+initPanzoom('output_matches');
+initPanzoom('output_feat1');
+initPanzoom('output_feat2');

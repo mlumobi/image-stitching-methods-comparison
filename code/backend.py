@@ -24,34 +24,21 @@ class ImageAlignBackend:
             mkpts0, mkpts1 = match_features_loftr(img1, img2, loftr)
 
         # Save visualizations: keypoints on each image and the matches image
-        feat1_path = os.path.join(self.output_dir, f"features_img1_{method.lower()}.jpg")
-        feat2_path = os.path.join(self.output_dir, f"features_img2_{method.lower()}.jpg")
-        matches_path = os.path.join(self.output_dir, f"matches_{method.lower()}.jpg")
-        
-        # Also save to project outputs
-        feat1_proj_path = os.path.join(self.project_output_dir, f"features_img1_{method.lower()}.jpg")
-        feat2_proj_path = os.path.join(self.project_output_dir, f"features_img2_{method.lower()}.jpg")
-        matches_proj_path = os.path.join(self.project_output_dir, f"matches_{method.lower()}.jpg")
+        feat1_path = os.path.join(self.project_output_dir, f"features_img1_{method.lower()}.jpg")
+        feat2_path = os.path.join(self.project_output_dir, f"features_img2_{method.lower()}.jpg")
+        matches_path = os.path.join(self.project_output_dir, f"matches_{method.lower()}.jpg")
 
         draw_keypoints(img1, mkpts0, feat1_path)
         draw_keypoints(img2, mkpts1, feat2_path)
         draw_matches(img1, img2, mkpts0, mkpts1, matches_path)
-        
-        # Copy to project outputs
-        import shutil
-        shutil.copy(feat1_path, feat1_proj_path)
-        shutil.copy(feat2_path, feat2_proj_path)
-        shutil.copy(matches_path, matches_proj_path)
 
         # Align and produce full panorama (no cropping)
         pano_img1, warped_img2 = align_images(img1, img2, mkpts0, mkpts1)
         blended = blend_images(pano_img1, warped_img2)
 
-        result_path = os.path.join(self.output_dir, f"blended_{method.lower()}.jpg")
-        result_proj_path = os.path.join(self.project_output_dir, f"blended_{method.lower()}.jpg")
+        result_path = os.path.join(self.project_output_dir, f"blended_{method.lower()}.jpg")
         
         save_image(result_path, blended)
-        shutil.copy(result_path, result_proj_path)
 
         # Return paths for stitched image and visualizations
         return {
