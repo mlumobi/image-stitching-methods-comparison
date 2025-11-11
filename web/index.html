@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Image Stitching Tools</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Comparative Study of Traditional and Deep Learning Image Stitching Methods</h1>
+      <p class="subtitle">SIFT • ORB • LoFTR</p>
+    </header>
+
+    <div class="main-layout">
+      <!-- Input Panel -->
+      <aside class="input-panel">
+        <h3>Input</h3>
+        <div class="form-group">
+          <label>Image 1:</label>
+          <input type="file" id="img1" accept="*">
+          <span class="file-name" id="name1">No file</span>
+        </div>
+
+        <div class="form-group">
+          <label>Image 2:</label>
+          <input type="file" id="img2" accept="*">
+          <span class="file-name" id="name2">No file</span>
+        </div>
+
+        <div class="form-group">
+          <label>Method:</label>
+          <select id="method">
+            <option value="SIFT">SIFT</option>
+            <option value="ORB">ORB</option>
+            <option value="LoFTR">LoFTR</option>
+          </select>
+        </div>
+
+        <button id="runBtn" class="btn-primary" onclick="run(event)">Run Stitching</button>
+        <button id="saveBtn" class="btn-secondary" onclick="saveResults()" style="display:none;">Save Results</button>
+
+  <!-- Read-only, scrollable command-like status window -->
+  <textarea id="status" class="status" readonly spellcheck="false" aria-readonly="true" rows="8">Ready.</textarea>
+        <div id="timing" class="timing" style="display:none;">
+          Time: <span id="elapsed">0</span> sec
+        </div>
+      </aside>
+
+      <!-- Results Panel -->
+      <main class="results-panel">
+        <!-- Single-page viewer: show stitched, matches, and features together -->
+        <div class="viewer">
+
+          <section class="pane features-section">
+            <h3>Features</h3>
+            <div class="features-grid">
+              <div class="feature-item">
+                <h4>Image 1 Features</h4>
+                <div class="pane-content">
+                  <img id="output_feat1" class="result-image">
+                </div>  
+              </div>
+              <div class="feature-item">
+                <h4>Image 2 Features</h4>
+                <div class="pane-content">
+                  <img id="output_feat2" class="result-image">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="pane matches-section">
+            <h3>Matches</h3>
+            <div class="pane-content">
+              <img id="output_matches" class="result-image">
+            </div>
+          </section>
+
+          <section class="pane stitched-section">
+            <h3>Stitched</h3>
+            <div class="pane-content">
+              <img id="output_stitched" class="result-image">
+            </div>
+          </section>
+          
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
