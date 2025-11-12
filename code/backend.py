@@ -14,6 +14,10 @@ class ImageAlignBackend:
         print(f"Running {method}...")
         img1, img2 = load_images(path1, path2)
 
+        # Extract base names (without extension)
+        name1 = os.path.splitext(os.path.basename(path1))[0]
+        name2 = os.path.splitext(os.path.basename(path2))[0]
+
         if method in ["SIFT", "ORB"]:
             detector = select_matcher(method)
             mkpts0, mkpts1 = match_features_cv(img1, img2, detector)
@@ -21,24 +25,24 @@ class ImageAlignBackend:
             loftr = select_matcher(method)
             mkpts0, mkpts1 = match_features_loftr(img1, img2, loftr)
 
-        # Save visualizations: keypoints on each image and the matches image
-        feat1_path = os.path.join(self.project_output_dir, f"features_img1_{method.lower()}.jpg")
-        feat2_path = os.path.join(self.project_output_dir, f"features_img2_{method.lower()}.jpg")
-        matches_path = os.path.join(self.project_output_dir, f"matches_{method.lower()}.jpg")
+        # Construct filenames with original image names
+        feat1_path = os.path.join(self.project_output_dir, f"{name1}_features_{method.lower()}.jpg")
+        feat2_path = os.path.join(self.project_output_dir, f"{name2}_features_{method.lower()}.jpg")
+        matches_path = os.path.join(self.project_output_dir, f"{name1}_{name2}_matches_{method.lower()}.jpg")
 
+        # Draw visualizations
         draw_keypoints(img1, mkpts0, feat1_path)
         draw_keypoints(img2, mkpts1, feat2_path)
         draw_matches(img1, img2, mkpts0, mkpts1, matches_path)
 
-        # Align and produce full panorama (no cropping)
+        # Align and blend
         pano_img1, warped_img2 = align_images(img1, img2, mkpts0, mkpts1)
         blended = blend_images(pano_img1, warped_img2)
 
-        result_path = os.path.join(self.project_output_dir, f"blended_{method.lower()}.jpg")
-        
+        # Save blended image with both names
+        result_path = os.path.join(self.project_output_dir, f"{name1}_{name2}_blended_{method.lower()}.jpg")
         save_image(result_path, blended)
 
-        # Return paths for stitched image and visualizations
         return {
             "stitched": result_path,
             "features1": feat1_path,
