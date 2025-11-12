@@ -1,0 +1,11 @@
+# .gitignore
+.DS_Store
+
+# venv environment
+image-stitching/
+
+# Python cache files
+__pycache__/
+
+# output directories
+outputs/
