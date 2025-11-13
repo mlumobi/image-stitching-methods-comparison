@@ -4,11 +4,14 @@ import torch
 import kornia as K
 import kornia.feature as KF
 
+max_nfeatures = 5000
+max_matches = 500
+
 def select_matcher(method):
     if method == "SIFT":
-        detector = cv2.SIFT_create(nfeatures=3000)
+        detector = cv2.SIFT_create(nfeatures=max_nfeatures)
     elif method == "ORB":
-        detector = cv2.ORB_create()
+        detector = cv2.ORB_create(nfeatures=max_nfeatures)
     elif method == "LoFTR":
         detector = KF.LoFTR(pretrained='outdoor').eval()
     else:
@@ -23,6 +26,7 @@ def match_features_cv(img1, img2, detector):
     matches = bf.knnMatch(des1, des2, k=2)
     good = [m for m, n in matches if m.distance < 0.75 * n.distance]
 
+    good = sorted(good, key=lambda m: m.distance)[:max_matches]
     mkpts0 = np.float32([kp1[m.queryIdx].pt for m in good])
     mkpts1 = np.float32([kp2[m.trainIdx].pt for m in good])
     return mkpts0, mkpts1
