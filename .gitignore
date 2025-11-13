@@ -3,6 +3,7 @@
 
 # venv environment
 image-stitching/
+venv/
 
 # Python cache files
 __pycache__/
