@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Image Stitching Tools</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Load CSS from Flask static folder -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
   <div class="container">
     <header>
@@ -13,9 +16,11 @@
     </header>
 
     <div class="main-layout">
+      
       <!-- Input Panel -->
       <aside class="input-panel">
         <h3>Input</h3>
+
         <div class="form-group">
           <label>Image 1:</label>
           <input type="file" id="img1" accept="*">
@@ -39,8 +44,9 @@
 
         <button id="runBtn" class="btn-primary" onclick="run(event)">Run Stitching</button>
 
-  <!-- Read-only, scrollable command-like status window -->
-  <textarea id="status" class="status" readonly spellcheck="false" aria-readonly="true" rows="8">Ready.</textarea>
+        <!-- Command window output -->
+        <textarea id="status" class="status" readonly spellcheck="false" rows="8">Ready.</textarea>
+
         <div id="timing" class="timing" style="display:none;">
           Time: <span id="elapsed">0</span> sec
         </div>
@@ -48,46 +54,49 @@
 
       <!-- Results Panel -->
       <main class="results-panel">
-        <!-- Single-page viewer: show stitched, matches, and features together -->
         <div class="viewer">
 
+          <!-- Feature Images -->
           <section class="pane features-section">
             <h3>Features</h3>
             <div class="features-grid">
               <div class="feature-item">
                 <h4>Image 1 Features</h4>
                 <div class="pane-content">
-                  <img id="output_feat1" class="result-image">
+                  <img id="output_feat1" class="result-image" draggable="false">
                 </div>
               </div>
               <div class="feature-item">
                 <h4>Image 2 Features</h4>
                 <div class="pane-content">
-                  <img id="output_feat2" class="result-image">
+                  <img id="output_feat2" class="result-image" draggable="false">
                 </div>
               </div>
             </div>
           </section>
 
+          <!-- Matches -->
           <section class="pane matches-section">
             <h3>Matches</h3>
             <div class="pane-content">
-              <img id="output_matches" class="result-image">
+              <img id="output_matches" class="result-image" draggable="false">
             </div>
           </section>
 
+          <!-- Stitched -->
           <section class="pane stitched-section">
             <h3>Stitched</h3>
             <div class="pane-content">
-              <img id="output_stitched" class="result-image">
+              <img id="output_stitched" class="result-image" draggable="false">
             </div>
           </section>
-          
+
         </div>
       </main>
     </div>
   </div>
-  <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
-  <script src="script.js"></script>
+
+  <!-- Load JS from Flask static folder -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

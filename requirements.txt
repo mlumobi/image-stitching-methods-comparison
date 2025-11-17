@@ -1,8 +1,10 @@
-# python 3.11 requirements.txt
-
+blinker==1.9.0
 bottle==0.13.4
+click==8.3.1
 filelock==3.20.0
+Flask==3.1.2
 fsspec==2025.10.0
+itsdangerous==2.2.0
 Jinja2==3.1.6
 kornia==0.8.2
 kornia_rs==0.1.10
@@ -19,7 +21,7 @@ pyobjc-framework-Quartz==12.0
 pyobjc-framework-Security==12.0
 pyobjc-framework-UniformTypeIdentifiers==12.0
 pyobjc-framework-WebKit==12.0
-pywebview==6.1
 sympy==1.14.0
 torch==2.9.1
 typing_extensions==4.15.0
+Werkzeug==3.1.3
