@@ -88,12 +88,12 @@ def match_rate_orb(img_ref, img_test):
 # ===============================
 # Evaluate wrapper
 # ===============================
-def evaluate_similarity(img_ref, img_fused):
-    ssim_val = compute_ssim(img_ref, img_fused)
-    mse_val = compute_mse(img_ref, img_fused)
-    psnr_val = compute_psnr(img_ref, img_fused)
-    sift_rate = match_rate_sift(img_ref, img_fused)
-    orb_rate = match_rate_orb(img_ref, img_fused)
+def evaluate_similarity(img_ref, img_blended):
+    ssim_val = compute_ssim(img_ref, img_blended)
+    mse_val = compute_mse(img_ref, img_blended)
+    psnr_val = compute_psnr(img_ref, img_blended)
+    sift_rate = match_rate_sift(img_ref, img_blended)
+    orb_rate = match_rate_orb(img_ref, img_blended)
     return {
         "ssim": ssim_val,
         "mse": mse_val,
@@ -108,10 +108,10 @@ def evaluate_similarity(img_ref, img_fused):
 # ===============================
 import matplotlib.pyplot as plt
 
-def visualize_result(ref, fused, ssim_value, psnr_value):
-    # Resize fused to match reference
-    fused_resized = cv2.resize(fused, (ref.shape[1], ref.shape[0]))
-    diff = cv2.absdiff(ref, fused_resized)
+def visualize_result(ref, blended, ssim_value, psnr_value):
+    # Resize blended to match reference
+    blended_resized = cv2.resize(blended, (ref.shape[1], ref.shape[0]))
+    diff = cv2.absdiff(ref, blended_resized)
 
     plt.figure(figsize=(15, 6))
     plt.suptitle(f"SSIM = {ssim_value:.4f}   |   PSNR = {psnr_value:.2f} dB", fontsize=16)
@@ -122,8 +122,8 @@ def visualize_result(ref, fused, ssim_value, psnr_value):
     plt.axis("off")
 
     plt.subplot(1, 3, 2)
-    plt.title("Fused")
-    plt.imshow(cv2.cvtColor(fused_resized, cv2.COLOR_BGR2RGB))
+    plt.title("blended")
+    plt.imshow(cv2.cvtColor(blended_resized, cv2.COLOR_BGR2RGB))
     plt.axis("off")
 
     plt.subplot(1, 3, 3)
@@ -152,12 +152,12 @@ def ask_image(prompt):
 # ===============================
 def main():
     ref_path = ask_image("Reference image path: ")
-    fused_path = ask_image("Fused image path: ")
+    blended_path = ask_image("blended image path: ")
 
     img_ref = cv2.imread(ref_path)
-    img_fused = cv2.imread(fused_path)
+    img_blended = cv2.imread(blended_path)
 
-    result = evaluate_similarity(img_ref, img_fused)
+    result = evaluate_similarity(img_ref, img_blended)
 
     print("\n===== Evaluation Result =====")
     print(f"SSIM: {result['ssim']:.4f}")
@@ -173,7 +173,7 @@ def main():
 
     visualize = input("Visualize result? (y/n) [y]: ").strip().lower()
     if visualize == "" or visualize == "y":
-        visualize_result(img_ref, img_fused, result["ssim"], result["psnr"])
+        visualize_result(img_ref, img_blended, result["ssim"], result["psnr"])
 
 if __name__ == "__main__":
     main()

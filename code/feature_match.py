@@ -4,8 +4,8 @@ import torch
 import kornia as K
 import kornia.feature as KF
 
-max_nfeatures = 5000
-max_matches = 500
+max_nfeatures = 6000
+max_matches = 600
 
 def select_matcher(method):
     if method == "SIFT":

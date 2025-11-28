@@ -3,10 +3,13 @@
 
 # venv environment
 image-stitching/
-venv/
+.venv/
 
 # Python cache files
 __pycache__/
 
 # output directories
 outputs/
+
+# pycharm
+.idea/
