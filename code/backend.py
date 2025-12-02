@@ -6,19 +6,6 @@ from alignment import align_images
 from blending import blend_images
 import cv2
 
-# --- Add resize function ---
-def resize_if_large(img, max_side=1000):
-    h, w = img.shape[:2]
-    if max(h, w) <= max_side:
-        return img  # No resizing needed
-
-    ratio = max_side / max(h, w)
-    new_w = int(w * ratio)
-    new_h = int(h * ratio)
-
-    return cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
-
-
 class ImageAlignBackend:
     def __init__(self):
         self.project_output_dir = "outputs"
@@ -27,10 +14,6 @@ class ImageAlignBackend:
     def run_pipeline(self, path1, path2, method):
         print(f"Running {method}...")
         img1, img2 = load_images(path1, path2)
-
-        # --- Resize images BEFORE matching ---
-        img1 = resize_if_large(img1)
-        img2 = resize_if_large(img2)
 
         # Extract base names (without extension)
         name1 = os.path.splitext(os.path.basename(path1))[0]

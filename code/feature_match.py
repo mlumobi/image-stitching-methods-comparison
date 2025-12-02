@@ -4,13 +4,15 @@ import torch
 import kornia as K
 import kornia.feature as KF
 
-max_nfeatures = 6000
-max_matches = 600
+max_nfeatures = 5000
+max_matches = 500
 
 def select_matcher(method):
     if method == "SIFT":
+        # detector = cv2.SIFT_create()
         detector = cv2.SIFT_create(nfeatures=max_nfeatures)
     elif method == "ORB":
+        # detector = cv2.ORB_create()
         detector = cv2.ORB_create(nfeatures=max_nfeatures)
     elif method == "LoFTR":
         detector = KF.LoFTR(pretrained='outdoor').eval()
