@@ -6,8 +6,9 @@
       <excludeFolder url="file://$MODULE_DIR$/code/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/SEAGULL2016" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv/bin/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.11 (image-stitching-methods-comparison)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.11 virtualenv at ~/Documents/Github Repo/image-stitching-methods-comparison/.venv (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
